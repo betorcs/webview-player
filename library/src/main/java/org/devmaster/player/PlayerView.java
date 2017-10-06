@@ -2,9 +2,12 @@ package org.devmaster.player;
 
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.AttrRes;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
@@ -79,8 +82,19 @@ public class PlayerView extends FrameLayout implements Player.View, PlayerWebVie
         mPresenter.loadVideo(videoId, source);
     }
 
+    public void setTint(@ColorInt int tint) {
+        Drawable drawable = mProgressBar.getIndeterminateDrawable();
+        if (drawable != null) {
+            DrawableCompat.setTint(drawable, tint);
+        }
+    }
+
     public void setFullscreenView(FrameLayout fullscreenView) {
-        mWebView.setFullscreenView(fullscreenView);
+        mWebView.setFullscreenView(fullscreenView, null);
+    }
+
+    public void setFullscreenView(FrameLayout fullscreenView, OnFullscreenModeListener onFullscreenModeListener) {
+        mWebView.setFullscreenView(fullscreenView, onFullscreenModeListener);
     }
 
     @Override

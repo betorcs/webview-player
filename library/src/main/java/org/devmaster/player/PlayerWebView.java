@@ -32,8 +32,8 @@ class PlayerWebView extends WebView {
         }
     }
 
-    void setFullscreenView(FrameLayout fullscreenView) {
-        mWebChromeClient.setFullscreenView(fullscreenView);
+    void setFullscreenView(FrameLayout fullscreenView, OnFullscreenModeListener onFullscreenModeListener) {
+        mWebChromeClient.setFullscreenView(fullscreenView, onFullscreenModeListener);
     }
 
     void setOnProgressChangeListener(OnProgressChangeListener onProgressChangeListener) {
@@ -56,6 +56,7 @@ class PlayerWebView extends WebView {
 
         private FrameLayout mFullscreenView;
         private OnProgressChangeListener mOnProgressChangeListener;
+        private OnFullscreenModeListener mOnFullscreenModeListener;
 
         @Override
         public void onShowCustomView(View view, CustomViewCallback callback) {
@@ -63,6 +64,9 @@ class PlayerWebView extends WebView {
                 mFullscreenView.removeAllViews();
                 mFullscreenView.addView(view);
                 mFullscreenView.setVisibility(View.VISIBLE);
+                if (mOnFullscreenModeListener != null) {
+                    mOnFullscreenModeListener.onFullscreenEnter();
+                }
             }
         }
 
@@ -71,6 +75,9 @@ class PlayerWebView extends WebView {
             if (mFullscreenView != null) {
                 mFullscreenView.removeAllViews();
                 mFullscreenView.setVisibility(View.GONE);
+            }
+            if (mOnFullscreenModeListener != null) {
+                mOnFullscreenModeListener.onFullscreenExit();
             }
         }
 
@@ -86,8 +93,9 @@ class PlayerWebView extends WebView {
             mOnProgressChangeListener = onProgressChangeListener;
         }
 
-        void setFullscreenView(FrameLayout fullscreenView) {
+        void setFullscreenView(FrameLayout fullscreenView, OnFullscreenModeListener onFullscreenModeListener) {
             mFullscreenView = fullscreenView;
+            mOnFullscreenModeListener = onFullscreenModeListener;
         }
     }
 
