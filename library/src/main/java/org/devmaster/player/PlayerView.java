@@ -28,18 +28,22 @@ public class PlayerView extends FrameLayout implements Player.View, PlayerWebVie
 
     public PlayerView(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
         mWebView = new PlayerWebView(context);
+        mProgressBar = new ProgressBar(context);
+
+        if (isInEditMode()) {
+            return;
+        }
+
         mWebView.setOnProgressChangeListener(this);
         requestLayout();
         addView(mWebView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
-        mProgressBar = new ProgressBar(context);
         mProgressBar.setVisibility(GONE);
         LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.gravity = CENTER;
         addView(mProgressBar, params);
-
-        ;
     }
 
     @Override
