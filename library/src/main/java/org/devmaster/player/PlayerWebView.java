@@ -57,9 +57,7 @@ class PlayerWebView extends WebView {
 
         @Override
         public void onShowCustomView(View view, CustomViewCallback callback) {
-            if (mFullscreenView == null) {
-                super.onShowCustomView(view, callback);
-            } else {
+            if (mFullscreenView != null) {
                 mFullscreenView.removeAllViews();
                 mFullscreenView.addView(view);
                 mFullscreenView.setVisibility(View.VISIBLE);
@@ -68,9 +66,7 @@ class PlayerWebView extends WebView {
 
         @Override
         public void onHideCustomView() {
-            if (mFullscreenView == null) {
-                super.onHideCustomView();
-            } else {
+            if (mFullscreenView != null) {
                 mFullscreenView.removeAllViews();
                 mFullscreenView.setVisibility(View.GONE);
             }
