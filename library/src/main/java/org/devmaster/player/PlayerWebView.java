@@ -40,6 +40,13 @@ class PlayerWebView extends WebView {
         mWebChromeClient.setOnProgressChangeListener(onProgressChangeListener);
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        clear();
+        loadUrl("about:blank");
+        super.onDetachedFromWindow();
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     private void setupSettings(WebChromeClient webChromeClient) {
         setWebChromeClient(webChromeClient);
@@ -48,8 +55,8 @@ class PlayerWebView extends WebView {
         getSettings().setLoadWithOverviewMode(true);
         getSettings().setSupportZoom(false);
         getSettings().setJavaScriptEnabled(true);
-        getSettings().setAppCacheEnabled(true);
-        getSettings().setDomStorageEnabled(true);
+        getSettings().setAppCacheEnabled(false);
+        getSettings().setDomStorageEnabled(false);
     }
 
     private class CustomWebChromeClient extends WebChromeClient {
@@ -97,6 +104,23 @@ class PlayerWebView extends WebView {
             mFullscreenView = fullscreenView;
             mOnFullscreenModeListener = onFullscreenModeListener;
         }
+    }
+
+    @Override
+    public void loadDataWithBaseURL(String baseUrl, String data, String mimeType, String encoding, String historyUrl) {
+        clear();
+        super.loadDataWithBaseURL(baseUrl, data, mimeType, encoding, historyUrl);
+    }
+
+    private void clear() {
+        clearHistory();
+        clearCache(true);
+    }
+
+    @Override
+    public void loadUrl(String url) {
+        clear();
+        super.loadUrl(url);
     }
 
     private class CustomWebViewClient extends WebViewClient {
