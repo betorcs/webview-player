@@ -68,8 +68,30 @@ public class PlayerView extends FrameLayout implements Player.View, PlayerWebVie
     @Override
     protected void onDetachedFromWindow() {
         mPresenter.reset();
-        mWebView.destroy();
         removeView(mWebView);
+
+        mWebView.clearHistory();
+
+        // NOTE: clears RAM cache, if you pass true, it will also clear the disk cache.
+        // Probably not a great idea to pass true if you have other WebViews still alive.
+        mWebView.clearCache(true);
+
+        // Loading a blank page is optional, but will ensure that the WebView isn't doing anything when you destroy it.
+        mWebView.loadUrl("about:blank");
+
+        mWebView.onPause();
+        mWebView.removeAllViews();
+        mWebView.destroyDrawingCache();
+
+        // NOTE: This pauses JavaScript execution for ALL WebViews,
+        // do not use if you have other WebViews still alive.
+        // If you create another WebView after calling this,
+        // make sure to call mWebView.resumeTimers().
+        mWebView.pauseTimers();
+
+        // NOTE: This can occasionally cause a segfault below API 17 (4.2)
+        mWebView.destroy();
+
         super.onDetachedFromWindow();
         mIsAttachedToWindow = false;
     }
