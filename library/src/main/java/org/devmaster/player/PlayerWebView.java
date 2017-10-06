@@ -27,7 +27,9 @@ class PlayerWebView extends WebView {
 
         mWebChromeClient = new CustomWebChromeClient();
 
-        setupSettings(mWebChromeClient);
+        if (!isInEditMode()) {
+            setupSettings(mWebChromeClient);
+        }
     }
 
     void setFullscreenView(FrameLayout fullscreenView) {
